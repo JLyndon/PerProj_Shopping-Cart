@@ -59,8 +59,8 @@ initial = init_cmd()
 
 if initial == True:
     print("\nItem list:")
-    for i in productSelection_01:
-        print(i.capitalize())
+    for (j, i) in zip(productCode,productSelection_01):
+            print(j, i.capitalize())
     print("\nWhat would you like to buy?")
     second_cmd()
 else:
