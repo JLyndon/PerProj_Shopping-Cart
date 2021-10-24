@@ -16,8 +16,15 @@ productCode = {
     "0023":"ORANGE"
 } #Added product codes users can input to access product.
 
-numerical = [1]
-code_numerical = [1]
+numerical = [""]
+code_numerical = [""]
+usr_prod_listv1 = [""]
+usr_prod_listv2 = [""]
+usr_total_1 = [""]
+usr_total_2 = [""]
+quan1 = [""]
+quan2 = [""]
+usrCart = usr_prod_listv1 + usr_prod_listv2 + quan1 + quan2 + usr_total_1 + usr_total_2
 
 def init_cmd(): #Asks for valid command -- option to either browse or exit.
     while True:
@@ -37,9 +44,9 @@ def codeRead(arg1):
 
 def YNConfirmation(arg1):
     if arg1 == True:
-        print("\nWould you like to purchase?")
+        print("\nWould you like to purchase?\n       Yes or No")
         while True:
-            usr_decision = input("       Yes or No \n> ").lower()
+            usr_decision = input("\n> ").lower()
             if usr_decision == "yes":
                 return True
             elif usr_decision == "no":
@@ -54,10 +61,12 @@ def second_cmd(): #Ask users for product to check
         usr_second_cmd = input("\nEnter product name or code: ").upper()
         if usr_second_cmd in productSelection_01:
             explicit_prod = productSelection_01[usr_second_cmd]
+            usr_prod_listv1.append(usr_second_cmd)
             numerical.insert(0, explicit_prod)
             print(f"We do have that here. It costs {explicit_prod} gold coins.")
             return "True01"
         elif usr_second_cmd in productCode:
+            usr_prod_listv2.append(productCode[usr_second_cmd])
             converted = codeRead(usr_second_cmd)
             code_numerical.insert(0, converted)
             print(f"We do have that here. It costs {converted} gold coins.")
@@ -90,20 +99,45 @@ def third_cmd(arg1):
     if buy_decision == True:
         if arg1 == "True01":
             quantity = int(quantity_val())
+            quan1.insert(0, quantity)
             ttl_price_of_item01 = quantity*numerical[0]
-            numerical.pop(0)
-            print(ttl_price_of_item01)
-            return ttl_price_of_item01
+            usr_total_1.insert(0, ttl_price_of_item01)
+            print(f"The total amount of {usr_prod_listv1[-1]} with the quantity of {quantity} is {ttl_price_of_item01} gold coins.")
+            return "proceed"
         elif arg1 == "True02":
             quantity = int(quantity_val())
+            quan2.insert(0, quantity)
             ttl_price_of_item02 = quantity*code_numerical[0]
-            numerical.pop(0)
-            print(ttl_price_of_item02)
-            return ttl_price_of_item02
+            usr_total_2.insert(0, ttl_price_of_item02)
+            print(f"The total amount of {usr_prod_listv2[-1]} with the quantity of {quantity} is {ttl_price_of_item02} gold coins.")
+            return "proceed"
+    elif buy_decision == None:
+        return None
     else:
         print("\nDiscarded..")
         return third_cmd(second_cmd())
 
+def fourth_cmd(arg1):
+    if arg1 != None:
+        print("\nWould you like to add this to your cart?\n           Yes or No")
+        while True:
+            fnl_usr_decision = input("\n> ").lower()
+            if fnl_usr_decision == "yes":
+                print("Added!")
+                return third_cmd(second_cmd())
+            elif fnl_usr_decision == "no":
+                usr_prod_listv1.pop(0)
+                usr_prod_listv2.pop(0)
+                usr_total_1.pop(0)
+                usr_total_2.pop(0)
+                quan1.pop(0)
+                quan2.pop(0)
+                print("Discarded..")
+                return third_cmd(second_cmd())
+            else:
+                print("Please enter a valid command.")
+    else:
+        return None
 
 print("\nadd  - Browse shop items\nexit - Terminate transaction anytime")
 
@@ -114,6 +148,7 @@ if initial == True:
     for (j, i) in zip(productCode,productSelection_01):
             print(j, i.capitalize())
     print("\nWhat would you like to buy?")
-    third_cmd(second_cmd())
+    fnl_decision = third_cmd(second_cmd())
+    fourth_cmd(fnl_decision)
 else:
     print("Have a nice day.")
