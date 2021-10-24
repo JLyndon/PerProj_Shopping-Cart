@@ -16,6 +16,9 @@ productCode = {
     "0023":"ORANGE"
 } #Added product codes users can input to access product.
 
+numerical = [1]
+code_numerical = [1]
+
 def init_cmd(): #Asks for valid command -- option to either browse or exit.
     while True:
         usr_first_cmd = input("\n> ").lower()
@@ -24,7 +27,7 @@ def init_cmd(): #Asks for valid command -- option to either browse or exit.
         elif usr_first_cmd == "exit":
             return "exit_signal"
         else:
-            print("Please enter a valid command.")
+            print("\nPlease enter a valid command.")
 
 def codeRead(arg1):
     if arg1 in productCode:
@@ -34,7 +37,7 @@ def codeRead(arg1):
 
 def YNConfirmation(arg1):
     if arg1 == True:
-        print("Would you like to purchase?")
+        print("\nWould you like to purchase?")
         while True:
             usr_decision = input("       Yes or No \n> ").lower()
             if usr_decision == "yes":
@@ -50,29 +53,56 @@ def second_cmd(): #Ask users for product to check
     while True:
         usr_second_cmd = input("\nEnter product name or code: ").upper()
         if usr_second_cmd in productSelection_01:
-            print(f"We do have that here. It costs {productSelection_01[usr_second_cmd]} gold coins.")
-            return True
+            explicit_prod = productSelection_01[usr_second_cmd]
+            numerical.insert(0, explicit_prod)
+            print(f"We do have that here. It costs {explicit_prod} gold coins.")
+            return "True01"
         elif usr_second_cmd in productCode:
             converted = codeRead(usr_second_cmd)
+            code_numerical.insert(0, converted)
             print(f"We do have that here. It costs {converted} gold coins.")
-            return True
+            return "True02"
         elif usr_second_cmd == "EXIT":
             print("Thank you for stopping by. Come again.")
             return None
         else:
             print("Sorry. We don't have that here.")
 
-def third_cmd(arg1):
-    if arg1 == True:
-        confirmation = YNConfirmation(arg1)
-        if confirmation == True:
-            usr_third_cmd = input("\nQuantity: ")
-            return True
+def quantity_val():
+    while True:
+        usr_quantity = input("\nQuantity: ")
+        if usr_quantity.isdigit() == True:
+            return usr_quantity
         else:
-            print("\nDiscarded..")
-            return second_cmd()
+            print("Please enter a numerical value.")
+
+def YNConfirm_sepa(arg1):
+    if arg1 == "True01":
+        return True
+    elif arg1 == "True02":
+        return True
     else:
         return None
+
+def third_cmd(arg1):
+    buy_categ = YNConfirm_sepa(arg1)
+    buy_decision = YNConfirmation(buy_categ)
+    if buy_decision == True:
+        if arg1 == "True01":
+            quantity = int(quantity_val())
+            ttl_price_of_item01 = quantity*numerical[0]
+            numerical.pop(0)
+            print(ttl_price_of_item01)
+            return ttl_price_of_item01
+        elif arg1 == "True02":
+            quantity = int(quantity_val())
+            ttl_price_of_item02 = quantity*code_numerical[0]
+            numerical.pop(0)
+            print(ttl_price_of_item02)
+            return ttl_price_of_item02
+    else:
+        print("\nDiscarded..")
+        return third_cmd(second_cmd())
 
 
 print("\nadd  - Browse shop items\nexit - Terminate transaction anytime")
