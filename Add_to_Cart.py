@@ -17,14 +17,9 @@ productCode = {
 } #Added product codes users can input to access product.
 
 numerical = [""]
-code_numerical = [""]
-usr_prod_listv1 = [""]
-usr_prod_listv2 = [""]
-usr_total_1 = [""]
-usr_total_2 = [""]
-quan1 = [""]
-quan2 = [""]
-usrCart = usr_prod_listv1 + usr_prod_listv2 + quan1 + quan2 + usr_total_1 + usr_total_2
+usr_prod_list = [""]
+usr_total = [""]
+quan = [""]
 
 def init_cmd(): #Asks for valid command -- option to either browse or exit.
     while True:
@@ -61,14 +56,14 @@ def second_cmd(): #Ask users for product to check
         usr_second_cmd = input("\nEnter product name or code: ").upper()
         if usr_second_cmd in productSelection_01:
             explicit_prod = productSelection_01[usr_second_cmd]
-            usr_prod_listv1.append(usr_second_cmd)
+            usr_prod_list.insert(0, usr_second_cmd)
             numerical.insert(0, explicit_prod)
             print(f"We do have that here. It costs {explicit_prod} gold coins.")
             return "True01"
         elif usr_second_cmd in productCode:
-            usr_prod_listv2.append(productCode[usr_second_cmd])
+            usr_prod_list.insert(0, productCode[usr_second_cmd])
             converted = codeRead(usr_second_cmd)
-            code_numerical.insert(0, converted)
+            numerical.insert(0, converted)
             print(f"We do have that here. It costs {converted} gold coins.")
             return "True02"
         elif usr_second_cmd == "EXIT":
@@ -96,20 +91,20 @@ def YNConfirm_sepa(arg1):
 def third_cmd(arg1):
     buy_categ = YNConfirm_sepa(arg1)
     buy_decision = YNConfirmation(buy_categ)
+    global quantity
+    global ttl_price_of_item
     if buy_decision == True:
         if arg1 == "True01":
             quantity = int(quantity_val())
-            quan1.insert(0, quantity)
-            ttl_price_of_item01 = quantity*numerical[0]
-            usr_total_1.insert(0, ttl_price_of_item01)
-            print(f"The total amount of {usr_prod_listv1[-1]} with the quantity of {quantity} is {ttl_price_of_item01} gold coins.")
+            ttl_price_of_item = quantity*numerical[0]
+            quan.insert(0, quantity)
+            usr_total.insert(0, ttl_price_of_item)
             return "proceed"
         elif arg1 == "True02":
             quantity = int(quantity_val())
-            quan2.insert(0, quantity)
-            ttl_price_of_item02 = quantity*code_numerical[0]
-            usr_total_2.insert(0, ttl_price_of_item02)
-            print(f"The total amount of {usr_prod_listv2[-1]} with the quantity of {quantity} is {ttl_price_of_item02} gold coins.")
+            ttl_price_of_item = quantity*numerical[0]
+            quan.insert(0, quantity)
+            usr_total.insert(0, ttl_price_of_item)
             return "proceed"
     elif buy_decision == None:
         return None
@@ -126,13 +121,11 @@ def fourth_cmd(arg1):
                 print("Added!")
                 return third_cmd(second_cmd())
             elif fnl_usr_decision == "no":
-                usr_prod_listv1.pop(0)
-                usr_prod_listv2.pop(0)
-                usr_total_1.pop(0)
-                usr_total_2.pop(0)
-                quan1.pop(0)
-                quan2.pop(0)
-                print("Discarded..")
+                numerical.pop(0)
+                usr_prod_list.pop(0)
+                usr_total.pop(0)
+                quan.pop(0)
+                print("\nDiscarded..")
                 return third_cmd(second_cmd())
             else:
                 print("Please enter a valid command.")
@@ -149,6 +142,14 @@ if initial == True:
             print(j, i.capitalize())
     print("\nWhat would you like to buy?")
     fnl_decision = third_cmd(second_cmd())
-    fourth_cmd(fnl_decision)
+    if fnl_decision == "proceed":
+        print(f"The total amount of {usr_prod_list[0]} with the quantity of {quantity} is {ttl_price_of_item} gold coins.")
+        adding_to_crt = fourth_cmd(fnl_decision)
+    else:
+        None
+    #Add here if function for view cart
 else:
     print("Have a nice day.")
+
+for (i,j,x,y) in zip(usr_prod_list, numerical, quan, usr_total):
+    print(i,j,x,y)
