@@ -1,3 +1,4 @@
+import time
 productSelection_01 = {
     "APPLE":20,
     "ORANGE":25,
@@ -71,7 +72,8 @@ def second_cmd(): #Ask users for product to check
             print(f"We do have that here. It costs {converted} gold coins.")
             return "True02"
         elif usr_second_cmd == "EXIT":
-            print("Thank you for stopping by. Come again.")
+            time.sleep(1)
+            print("\nThank you for stopping by. Come again.")
             return None
         else:
             print("Sorry. We don't have that here.")
@@ -95,25 +97,27 @@ def YNConfirm_sepa(arg1):
 def third_cmd(arg1):
     buy_categ = YNConfirm_sepa(arg1)
     buy_decision = YNConfirmation(buy_categ)
-    global quantity
-    global ttl_price_of_item
     if buy_decision == True:
         if arg1 == "True01":
             quantity = int(quantity_val())
             ttl_price_of_item = quantity*numerical[0]
             quan.insert(0, quantity)
             usr_total.insert(0, ttl_price_of_item)
+            print(f"The total amount of {usr_prod_list[0]} with the quantity of {quantity} is {ttl_price_of_item} gold coins.")
             return "proceed"
         elif arg1 == "True02":
             quantity = int(quantity_val())
             ttl_price_of_item = quantity*numerical[0]
             quan.insert(0, quantity)
             usr_total.insert(0, ttl_price_of_item)
+            print(f"The total amount of {usr_prod_list[0]} with the quantity of {quantity} is {ttl_price_of_item} gold coins.")
             return "proceed"
     elif buy_decision == None:
         return None
     else:
         print("\nDiscarded..")
+        numerical.pop(0)
+        usr_prod_list.pop(0)
         return third_cmd(second_cmd())
 
 def fourth_cmd(arg1):
@@ -146,7 +150,6 @@ if initial == True:
     print("\nWhat would you like to buy?")
     fnl_decision = third_cmd(second_cmd())
     if fnl_decision == "proceed":
-        print(f"The total amount of {usr_prod_list[0]} with the quantity of {quantity} is {ttl_price_of_item} gold coins.")
         adding_to_crt = fourth_cmd(fnl_decision)
     else:
         None
@@ -154,5 +157,15 @@ if initial == True:
 else:
     print("Have a nice day.")
 
-for (i,j,x,y) in zip(usr_prod_list, numerical, quan, usr_total):
-    print(i,j,x,y)
+#Temporary Cart Sys
+items_in_cart = len(usr_prod_list)
+if items_in_cart > 2:
+    print( """\n                     Your Cart
+Product:      Price:         Quantity:          Total:\n""")
+    for (i,j,x,y) in zip(usr_prod_list[:-1], numerical[:-1], quan[:-1], usr_total[:-1]):
+        print(f"{i}       {j} gold coins     {x} pieces      {y} gold coins")
+else:
+    print( """\n                     Your Cart
+Product:      Price:         Quantity:          Total:\n""")
+    for (i,j,x,y) in zip(usr_prod_list[:1], numerical[:1], quan[:1], usr_total[:1]):
+        print(f"{i}       {j} gold coins     {x} pieces      {y} gold coins")
