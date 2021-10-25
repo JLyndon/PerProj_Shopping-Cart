@@ -1,13 +1,15 @@
+import time
 def usr_inpt():
     query = 0
     while True:
         usr_name = input("Enter your name: ")
         query += 1
         if usr_name != "":
-            print(f"Welcome to the shop, {usr_name}!")
-            break
+            time.sleep(2)
+            print(f"\n\nWelcome to the shop, {usr_name}!")
+            return "proceed"
         elif query == 5:
-            print("Please try again later.")
+            print("\nPlease try again later.")
             return None
-
-usr_inpt()
+        else:
+            print("\nPlease enter a user name.")

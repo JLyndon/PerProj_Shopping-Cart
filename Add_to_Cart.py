@@ -21,15 +21,19 @@ usr_prod_list = [""]
 usr_total = [""]
 quan = [""]
 
-def init_cmd(): #Asks for valid command -- option to either browse or exit.
-    while True:
-        usr_first_cmd = input("\n> ").lower()
-        if usr_first_cmd == "add":
-            return True
-        elif usr_first_cmd == "exit":
-            return "exit_signal"
-        else:
-            print("\nPlease enter a valid command.")
+def init_cmd(arg1): #If there is user input, ask command -- option to either browse or exit.
+    if arg1 != None:
+        print("\nadd  - Browse shop items\nexit - Terminate transaction anytime")
+        while True:
+            usr_first_cmd = input("\n> ").lower()
+            if usr_first_cmd == "add":
+                return True
+            elif usr_first_cmd == "exit":
+                return "exit_signal"
+            else:
+                print("\nPlease enter a valid command.")
+    else:
+        return None
 
 def codeRead(arg1):
     if arg1 in productCode:
@@ -119,22 +123,21 @@ def fourth_cmd(arg1):
             fnl_usr_decision = input("\n> ").lower()
             if fnl_usr_decision == "yes":
                 print("Added!")
-                return third_cmd(second_cmd())
+                return fourth_cmd(third_cmd(second_cmd()))
             elif fnl_usr_decision == "no":
                 numerical.pop(0)
                 usr_prod_list.pop(0)
                 usr_total.pop(0)
                 quan.pop(0)
                 print("\nDiscarded..")
-                return third_cmd(second_cmd())
+                return fourth_cmd(third_cmd(second_cmd()))
             else:
                 print("Please enter a valid command.")
     else:
         return None
 
-print("\nadd  - Browse shop items\nexit - Terminate transaction anytime")
-
-initial = init_cmd()
+from User_Input import usr_inpt
+initial = init_cmd(usr_inpt())
 
 if initial == True:
     print("\nItem list:")
