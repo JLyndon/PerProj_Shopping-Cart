@@ -5,7 +5,9 @@ def usr_inpt():
         usr_name = input("Enter your name: ")
         query += 1
         if usr_name != "":
-            time.sleep(2)
+            for i in "...":
+                time.sleep(1)
+                print(i)
             print(f"\n\nWelcome to the shop, {usr_name}!")
             return "proceed"
         elif query == 5:
