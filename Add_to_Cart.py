@@ -164,8 +164,13 @@ if items_in_cart > 2:
 Product:      Price:         Quantity:          Total:\n""")
     for (i,j,x,y) in zip(usr_prod_list[:-1], numerical[:-1], quan[:-1], usr_total[:-1]):
         print(f"{i}       {j} gold coins     {x} pieces      {y} gold coins")
-else:
+elif items_in_cart == 2:
     print( """\n                     Your Cart
 Product:      Price:         Quantity:          Total:\n""")
     for (i,j,x,y) in zip(usr_prod_list[:1], numerical[:1], quan[:1], usr_total[:1]):
+        print(f"{i}       {j} gold coins     {x} pieces      {y} gold coins")
+else:
+    print( """\n                     Your Cart
+Product:      Price:         Quantity:          Total:\n""")
+    for (i,j,x,y) in zip(usr_prod_list[:0], numerical[:0], quan[:0], usr_total[:0]):
         print(f"{i}       {j} gold coins     {x} pieces      {y} gold coins")
